@@ -6,13 +6,13 @@ public class Task {
     private int id;
     private String status;
 
-
-
-    public Task(String title, String description, int id) {
+    public Task(String title, String description) {
         this.title = title;
         this.description = description;
+    }
+
+    public void setId(int id) {
         this.id = id;
-      // this.status = status;
     }
 
     public void setStatus(String status) {

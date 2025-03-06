@@ -2,24 +2,21 @@
 public class TaskTracker {
     public static void main(String[] args) {
         Manager manager = new Manager();
-        Task task1 = new Task("забрать заказ", "заказ №125",manager.generateId());
-        Task task2 = new Task("сложить вещи в шкаф", "вещи должны лежать на своих полках", manager.generateId());
-        Epic epic1 = new Epic("купить дом", "дом должен быть удобный и красивый", manager.generateId());
-        Subtask subtask1 = new Subtask("посмотреть объявления о продаже", "объявления 21212", manager.generateId(), epic1.getId());
-        Subtask subtask2 = new Subtask("выбрать расположение", "расположение в деревне", manager.generateId(), epic1.getId());
-        Epic epic2 = new Epic("ораганизовать праздник", "день рождения", manager.generateId());
-        Subtask subtask3 = new Subtask("заказать торт", "торт большой, вкусный", manager.generateId(), epic2.getId());
+        Task task1 = new Task("забрать заказ", "заказ №125");
+        Task task2 = new Task("сложить вещи в шкаф", "вещи должны лежать на своих полках");
+        Epic epic1 = new Epic("купить дом", "дом должен быть удобный и красивый");
+        Subtask subtask1 = new Subtask("посмотреть объявления о продаже", "объявления 21212", epic1.getId());
+        Subtask subtask2 = new Subtask("выбрать расположение", "расположение в деревне", epic1.getId());
+        Epic epic2 = new Epic("ораганизовать праздник", "день рождения");
+        Subtask subtask3 = new Subtask("заказать торт", "торт большой, вкусный", epic2.getId());
 
         manager.createTask(task1);
         manager.createTask(task2);
         manager.createEpicTask(epic1);
-        manager.createSubTask(subtask1);
-        manager.createSubTask(subtask2);
-        epic1.putSubtask(subtask1);
-        epic1.putSubtask(subtask2);
+        manager.createSubTask(subtask1, epic1.getId());
+        manager.createSubTask(subtask2, epic1.getId());
         manager.createEpicTask(epic2);
-        manager.createSubTask(subtask3);
-        epic2.putSubtask(subtask3);
+        manager.createSubTask(subtask3, epic2.getId());
 
         System.out.println("task1= " + task1);
         System.out.println("task2= " + task2);
@@ -30,19 +27,19 @@ public class TaskTracker {
         System.out.println("subtask3= " + subtask3);
         System.out.println();
 
-        task1.setStatus("inProgress"); // меняем статус задачи на inProgress
+        task1.setStatus(Manager.IN_PROGRESS_STATUS);
         manager.updateTask(task1);
         System.out.println(manager.getTask(task1.getId()));
-        task2.setStatus("done");
+        task2.setStatus(Manager.DONE_STATUS);
         manager.updateTask(task2);
         System.out.println(manager.getTask(task2.getId()));
-        subtask1.setStatus("done");
+        subtask1.setStatus(Manager.DONE_STATUS);
         manager.updateSubTask(subtask1);
         System.out.println(manager.getSubTask(subtask1.getId()));
-        subtask2.setStatus("done");
+        subtask2.setStatus(Manager.DONE_STATUS);
         manager.updateSubTask(subtask2);
         System.out.println(manager.getSubTask(subtask2.getId()));
-        subtask3.setStatus("inProgress");
+        subtask3.setStatus(Manager.IN_PROGRESS_STATUS);
         manager.updateSubTask(subtask3);
         System.out.println(manager.getSubTask(subtask3.getId()));
         System.out.println(manager.getEpicTask(epic1.getId()));
@@ -73,13 +70,13 @@ public class TaskTracker {
 
         System.out.println("Удаление подзадачи subtask2: ");
         manager.deleteSubTask(subtask2);
-        System.out.println(manager.getAllSubtasks()); // вывод списка всех подзадач, без удаленной подзадачи
+        System.out.println(manager.getAllSubtasks());
         System.out.println();
 
         System.out.println("Удаление эпика:");
         manager.deleteEpicTask(epic2);
         System.out.println(manager.getAllEpics());
-        System.out.println(manager.getAllSubtasks()); // вывод списка подзадач удаленного эпика - должны удалиться все подзадачи
+        System.out.println(manager.getAllSubtasks());
 
         System.out.println("Удаление всех эпиков: ");
         manager.clearEpicTask(epic1);
